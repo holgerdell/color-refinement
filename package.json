@@ -1,0 +1,14 @@
+{
+  "name": "color-refinement",
+  "version": "1.0.0",
+  "description": "A visual demo of the color refinement algorithm",
+  "main": "cr.js",
+  "repository": "git@github.com:holgerdell/color-refinement.git",
+  "author": "Holger Dell <holgerdell@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^5.4.0",
+    "eslint-config-google": "^0.9.1"
+  }
+}

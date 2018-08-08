@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Color Refinement</title>
+    <link rel="stylesheet" href="normalize.css"/>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="d3.v5.min.js"></script>
+    <script>
+      /* if the local script is unavailable, load it from the CDN */
+      if (typeof d3 == 'undefined')
+      {
+        document.write(unescape("%3Cscript src='https://d3js.org/d3.v5.min.js'%3E%3C/script%3E"));
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <h1>
+        Color Refinement
+      </h1>
+      Round <span id="displayRound">0</span> of <span id="numRounds"></span>
+    </header>
+    <nav id="nav">
+      <div id="help">
+        ?
+        <div>URL parameters:<br/>
+          ?n=<span id="n"></span>&amp;m=<span id="m"></span>&amp;charge=<span id="charge"></span>
+          <br />
+          Also try:
+          <ul style="padding-left:2em;">
+            <li>&amp;nohelp  (hide navbar)</li>
+            <li>&amp;notrees  (hide trees for faster computation)</li>
+          </ul>
+        </div>
+      </div>
+      <div id="reload">
+        &#8634;
+        <div>Resample random graph [r]</div>
+      </div>
+      <div id="left">
+        &larr;
+        <div>Decrease depth [left, backspace, h]</div>
+      </div>
+      <div id="right">
+        &rarr;
+        <div>Increase depth [right, space, l]</div>
+      </div>
+      <div id="down">
+        &darr;
+        <div>Decrease charge [down, j]</div>
+      </div>
+      <div id="up">
+        &uarr;
+        <div>Increase charge [up, k]</div>
+      </div>
+    </nav>
+    <main id="main"><svg class="center-screen"></svg></main>
+    <aside id="crtrees">
+    </aside>
+    <script src="cr.js"></script>
+  </body>
+</html>
