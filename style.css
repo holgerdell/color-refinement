@@ -12,6 +12,17 @@ body {
   color: rgba(0, 0, 0, 0.7);
 }
 
+#creator {
+  position: absolute;
+  left: 2em;
+  bottom: 5em;
+  font-family: sans-serif;
+  font-size: small;
+}
+#creator a {
+  color: black;
+}
+
 @media only screen and (min-width: 500px) {
   body {
     grid-template-areas:
@@ -30,6 +41,9 @@ body {
       "nav main   crtrees";
     grid-template-columns: max-content 1fr auto;
     grid-template-rows: 0 auto;
+  }
+  #creator {
+    bottom: 2em;
   }
 }
 
