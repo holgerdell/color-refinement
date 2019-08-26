@@ -494,7 +494,7 @@ function main() {
   document.getElementById("m").innerText = m;
   document.getElementById("charge").innerText = charge;
 
-  document.addEventListener("keypress", (event) => pressKey(event.key));
+  document.addEventListener("keydown", (event) => pressKey(event.key));
   document.getElementById("up").addEventListener("click",
     () => pressKey("ArrowUp"));
   document.getElementById("down").addEventListener("click",
