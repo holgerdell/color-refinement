@@ -3,7 +3,7 @@
 A visual demo of the color refinement algorithm.
 
 - Use it [online](https://holgerdell.github.io/color-refinement/)
-- For offline use, clone this repository **and** download the D3 JavaScript library: [d3.v5.min.js](https://d3js.org/d3.v5.min.js)
+- For offline use, you will need to download the external resources loaded at the top of index.html, and change the paths correspondingly.
 
 ## Screenshot
 ![screenshot](screenshot.png)
