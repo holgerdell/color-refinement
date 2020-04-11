@@ -17,11 +17,18 @@
       <h1>
         Color Refinement
       </h1>
-      Round <span id="displayRound">0</span> of <span id="numRounds"></span>
+        Round
+        <div class="button" id="left">
+        <i class="material-icons">keyboard_arrow_left</i>
+        <div>Previous round of color refinement [left, backspace, h]</div>
+      </div><span id="displayRound">0</span><div class="button" id="right">
+        <i class="material-icons">keyboard_arrow_right</i>
+        <div>Next round of color refinement [right, space, l]</div>
+      </div> of <span id="numRounds"></span>
     </header>
     <nav id="nav">
       <div class="button" id="help">
-        ?
+        <i class="material-icons">help</i> 
         <div>URL parameters:<br/>
           #n=<span id="n"></span>&amp;m=<span id="m"></span>&amp;charge=<span id="charge"></span>
           <br />
@@ -34,24 +41,16 @@
         </div>
       </div>
       <div class="button" id="reload">
-        &#8634;
+        <i class="material-icons">replay</i> 
         <div>Resample random graph from a new seed [r]</div>
       </div>
-      <div class="button" id="left">
-        &larr;
-        <div>Decrease depth [left, backspace, h]</div>
-      </div>
-      <div class="button" id="right">
-        &rarr;
-        <div>Increase depth [right, space, l]</div>
+      <div class="button" id="up">
+        <i class="material-icons">keyboard_arrow_up</i>
+        <div>Increase charge [up, k]</div>
       </div>
       <div class="button" id="down">
-        &darr;
+        <i class="material-icons">keyboard_arrow_down</i>
         <div>Decrease charge [down, j]</div>
-      </div>
-      <div class="button" id="up">
-        &uarr;
-        <div>Increase charge [up, k]</div>
       </div>
     </nav>
     <main id="main">

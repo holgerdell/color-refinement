@@ -1,4 +1,15 @@
+*,
+h1,
+h2,
+h3,
+html,
 body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 100%;
   font-family: "Times", "Georgia", serif;
   display: grid;
   height: 100vh;
@@ -40,8 +51,8 @@ body {
     grid-template-areas:
       "nav header crtrees"
       "nav main   crtrees";
-    grid-template-columns: max-content 1fr auto;
-    grid-template-rows: 0 auto;
+    grid-template-columns: 50px 1fr auto;
+    grid-template-rows: 0 1fr;
   }
 }
 
@@ -57,99 +68,97 @@ nav,
 
 h1 {
   font-weight: normal;
-  margin: 0;
-  padding: 0;
 }
 
 header {
   grid-area: header;
   text-align: left;
-  margin: 0;
   padding-left: 2vw;
-  padding-top: 0;
 }
 
 @media only screen and (min-width: 700px) {
-  h1 { font-size: 5vw; }
   header { font-size: 3vw; }
+  h1 { font-size: 1.5em; }
+}
+
+header > div {
+  line-height: 1.5em;
 }
 
 nav {
   grid-area: nav;
-  display: grid;
-  grid-gap: 0;
-  grid-template-rows: 1;
-  grid-template-columns: repeat(auto-fit, max-content);
-  grid-template-areas: "help reload left right down up";
+  display: flex;
+  font-size: 40px;
+}
+
+@media only screen and (max-width: 699px) {
+  nav {
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
 }
 
 @media only screen and (min-width: 700px) {
   nav {
-    padding-top: 1em;
-    grid-template-rows: repeat(3, max-content);
-    grid-template-columns: repeat(2, max-content);
-    grid-template-areas:
-      "help reload"
-      "left right"
-      "down up";
+    flex-direction: column;
+    padding-top: 1rem;
+    width: 50px;
   }
 }
 
-#up { grid-area: up; }
-#left { grid-area: left; }
-#right { grid-area: right; }
-#down { grid-area: down; }
-#reload { grid-area: reload; }
-
 div.button {
-  border-radius: 20px;
-  font-family: monospace;
-  font-size: 30px;
-  line-height: 40px;
-  text-align: center;
-  width: 40px;
+  display: inline-block;
+}
+
+nav div.button {
   height: 40px;
-  margin: 5px;
+  width: 40px;
+  line-height: 0;
+  overflow: visible;
+  padding: 5px;
+}
+
+i.material-icons {
+  border-radius: 50%;
+  font-size: 100%;
+  vertical-align: middle;
+  display: inline-block;
+  position: relative;
+  z-index: 20;
+  text-align: center;
+  line-height: 100%;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-#help {
-  grid-area: help;
-  font-weight: bold;
-  font-family: "Georgia", serif;
+  overflow: visible;
 }
 
 div.button > div {
-  border-radius: 1em;
-  bottom: 2rem;
   display: block;
-  font-family: "Times", "Georgia", serif;
-  font-size: x-large;
-  font-weight: normal;
-  left: 2rem;
-  padding: 0.5em 1em 0.5em 1em;
-  position: absolute;
-  text-align: left;
   visibility: hidden;
+  position: absolute;
+  line-height: normal;
+  z-index: 10;
+  left: 0;
+  bottom: 0;
+  text-align: left;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 1.5rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-div.button:hover {
-  background-color: #cecef6;
-}
-
+div.button:hover i.material-icons,
 div.button:hover > div {
   background-color: #cecef6;
   visibility: visible;
 }
 
 @media only screen and (hover: none) {
-  div.button:hover {
-    background-color: inherit;
-  }
-
+  div.button:hover,
   div.button:hover > div {
     background-color: inherit;
     visibility: hidden;

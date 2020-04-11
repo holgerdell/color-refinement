@@ -261,7 +261,7 @@ function shortcuts (event) {
 }
 
 function drawNavElements (state) {
-  document.getElementById('nav').style.display = (state.navbar) ? 'grid' : 'none'
+  document.getElementById('nav').style.display = (state.navbar) ? 'flex' : 'none'
   document.getElementById('crtrees').style.display = (state.crtrees) ? 'grid' : 'none'
 
   document.getElementById('n').innerText = state.n
