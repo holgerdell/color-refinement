@@ -5,16 +5,7 @@ import * as cr from './cr.js'
 
 let svgnodes
 let svglinks
-const simulation = d3.forceSimulation().on('tick', () => {
-  svglinks
-    .attr('x1', e => e.source.x)
-    .attr('y1', e => e.source.y)
-    .attr('x2', e => e.target.x)
-    .attr('y2', e => e.target.y)
-  svgnodes
-    .attr('cx', v => v.x)
-    .attr('cy', v => v.y)
-})
+let simulation
 let treesPerRound
 let hoveringNode
 let highlightedColor = -1
@@ -166,7 +157,7 @@ function recenter () {
 function reload (forceResample = false) {
   const state = getState()
   const changedFields = getStateChanges(state)
-  if (forceResample || changedFields === undefined || changedFields.has('n') || changedFields.has('m')) {
+  if (forceResample || changedFields === undefined || changedFields.has('n') || changedFields.has('m') || changedFields.has('seed')) {
     if (svgnodes) {
       resetHighlightColor()
       svglinks.remove()
@@ -175,7 +166,10 @@ function reload (forceResample = false) {
     const w = document.getElementById('main').offsetWidth
     const h = document.getElementById('main').offsetHeight
 
-    const graph = cr.randomGraph(state.n, state.m)
+    if (Math.seedrandom && (state.seed === '' || forceResample)) {
+      state.seed = Math.random().toString(36).substr(2, 5)
+    }
+    const graph = cr.randomGraph(state.n, state.m, state.seed)
     treesPerRound = cr.colorRefinement(graph)
     document.getElementById('numRounds').innerText = treesPerRound.length - 1
 
@@ -214,7 +208,7 @@ function reload (forceResample = false) {
     recenter()
     state.round = Math.min(state.round, treesPerRound.length - 1)
     drawTrees(state, treesPerRound[state.round])
-    updateState(state, false)
+    updateState(state)
     drawRound(state)
   } else {
     if (changedFields.has('charge')) {
@@ -277,6 +271,17 @@ function drawNavElements (state) {
 
 /** The main function is called when the page has loaded */
 function main () {
+  simulation = d3.forceSimulation().on('tick', () => {
+    svglinks
+      .attr('x1', e => e.source.x)
+      .attr('y1', e => e.source.y)
+      .attr('x2', e => e.target.x)
+      .attr('y2', e => e.target.y)
+    svgnodes
+      .attr('cx', v => v.x)
+      .attr('cy', v => v.y)
+  })
+
   document.getElementById('up').addEventListener('click', () => increase('charge'))
   document.getElementById('down').addEventListener('click', () => decrease('charge'))
   document.getElementById('right').addEventListener('click', () => increase('round'))

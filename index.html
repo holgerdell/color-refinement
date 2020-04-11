@@ -4,17 +4,11 @@
     <meta charset="utf-8"/>
     <title>Color Refinement</title>
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico"/>
-    <link rel="stylesheet" href="assets/css/normalize.css"/>
-    <link rel="stylesheet" href="assets/css/style.css"/>
-    <script src="d3.v5.min.js"></script>
-    <script>
-      /* if the local script is unavailable, load it from the CDN */
-      if (typeof d3 == 'undefined')
-      {
-        document.write(unescape("%3Cscript src='https://d3js.org/d3.v5.min.js'%3E%3C/script%3E"));
-      }
-    </script>
-    <script type="module" src="assets/js/main.js" async></script>
+    <link rel="stylesheet" href="./assets/css/normalize.css"/>
+    <link rel="stylesheet" href="./assets/css/style.css"/>
+    <script src="https://d3js.org/d3.v5.min.js" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js" async></script>
+    <script type="module" src="./assets/js/main.js" async></script>
   </head>
   <body>
     <header>
@@ -31,6 +25,7 @@
           <br />
           Also try:
           <ul style="padding-left: 2em;">
+            <li>&amp;seed=hello  (to set the random seed)</li>
             <li>&amp;navbar=false  (hide navbar)</li>
             <li>&amp;crtrees=false  (hide trees and improve performance)</li>
           </ul>
@@ -38,7 +33,7 @@
       </div>
       <div class="button" id="reload">
         &#8634;
-        <div>Resample random graph [r]</div>
+        <div>Resample random graph from a new seed [r]</div>
       </div>
       <div class="button" id="left">
         &larr;

@@ -1,5 +1,14 @@
 import * as defaults from './defaults.js'
 
+const parse = (x, t) => {
+  switch (t) {
+    case 'number': return parseInt(x, 10)
+    case 'boolean': return !(x === 'false')
+    case 'string': return x
+    default: console.error(`${t} not recognized`)
+  }
+}
+
 export const getState = () => {
   const urlParams = {}
   let match
@@ -15,19 +24,8 @@ export const getState = () => {
   }
 
   const state = {}
-  for (const k of Object.keys(defaults.state)) {
-    if (urlParams[k] === undefined) {
-      state[k] = defaults.state[k]
-    } else {
-      switch (typeof defaults.state[k]) {
-        case 'number':
-          state[k] = parseInt(urlParams[k], 10)
-          break
-        case 'boolean':
-          state[k] = !(urlParams[k] === 'false')
-          break
-      }
-    }
+  for (const k of defaults.keys()) {
+    state[k] = (urlParams[k] === undefined) ? defaults.get(k) : parse(urlParams[k], typeof defaults.get(k))
   }
   return state
 }
@@ -45,23 +43,19 @@ export const getStateChanges = (state = getState()) => {
   return fs
 }
 
+const stringify = (x) => {
+  switch (typeof x) {
+    case 'number': return x.toString()
+    case 'boolean': return x.toString()
+    case 'string': return x
+    default: console.error(`${typeof x} not recognized`)
+  }
+}
+
 export const updateState = (state) => {
   let hash = '#'
-  for (const k of Object.keys(state)) {
-    if (state[k] !== defaults.state[k]) {
-      hash += k + '='
-      switch (typeof state[k]) {
-        case 'number':
-          hash += state[k].toString()
-          break
-        case 'boolean':
-          hash += state[k].toString()
-          break
-        default:
-          console.error(`${typeof state[k]} not recognized`)
-      }
-      hash += '&'
-    }
+  for (const k of defaults.keys()) {
+    if (state[k] !== defaults.get(k)) hash += `${k}=${stringify(state[k])}&`
   }
   hash = hash.substring(0, hash.length - 1)
   window.location.hash = hash

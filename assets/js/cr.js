@@ -4,7 +4,7 @@
   * @param {Number} m edges
   * @return {Graph}
   */
-export function randomGraph (n, m) {
+export function randomGraph (n, m, seed) {
   const maxNumEdges = n * (n - 1) / 2
   if (n < 0 || m < 0 || m > maxNumEdges) return undefined
 
@@ -13,7 +13,9 @@ export function randomGraph (n, m) {
     graph.vertices[i] = { name: i, neighbors: [], crtree: [] }
   }
 
-  const randomInt = (min, max) => Math.floor(Math.random() * (max - min) + min)
+  const random = (Math.seedrandom) ? (new Math.seedrandom(seed)) : Math.random // eslint-disable-line
+  const randomInt = (min, max) => Math.floor(random() * (max - min) + min)
+
   /** Generate a list of random integers using sparse Fisher-Yates shuffling */
   const state = {}
   for (let i = 0; i < m; i++) {
