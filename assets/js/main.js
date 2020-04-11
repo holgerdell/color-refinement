@@ -3,35 +3,29 @@ import { getState, updateState, getStateChanges } from './state.js'
 import color from './color.js'
 import * as cr from './cr.js'
 
-let svgnodes
-let svglinks
 let simulation
 let treesPerRound
 let hoveringNode
-let highlightedColor = -1
+let draggingNode
+let hoveringTreeRound
 
 /** Highlight nodes, links, and tree on a mouseover event
   * @param {Number} i is the color to be highlighted
   * @param {Number} round is the round that the color i refers to
   */
 function highlightColor (i, round) {
-  highlightedColor = i
-  svgnodes.attr('class', o => o.crtree[round].rank === highlightedColor ? 'highlight' : 'nonhighlight')
-  svglinks.attr('class', o => (o.source.crtree[round].rank === highlightedColor &&
-     o.target.crtree[round].rank === highlightedColor) ? 'highlight' : 'nonhighlight')
-  d3.selectAll('#crtrees > svg').attr('class', 'nonhighlight')
-  d3.select('#crtree' + highlightedColor).attr('class', 'highlight')
+  d3.selectAll('circle.graphNode').attr('class', o => o.crtree[round].rank === i ? 'graphNode highlight' : 'graphNode nonhighlight')
+  d3.selectAll('line.graphEdge').attr('class', o => (o.source.crtree[round].rank === i &&
+     o.target.crtree[round].rank === i) ? 'graphEdge highlight' : 'graphEdge nonhighlight')
+  d3.selectAll('#crtrees > svg').classed('nonhighlight', true)
+  d3.select('#crtree' + i).classed('nonhighlight', false).classed('highlight', true)
 }
 
 /** Reset all highlights (e.g. when the mouseover event is over) */
 function resetHighlightColor () {
-  if (highlightedColor >= 0) {
-    d3.selectAll('#crtrees > svg').attr('class', '')
-  }
-  svgnodes.attr('class', '')
-  svglinks.attr('class', '')
-  highlightedColor = -1
-  hoveringNode = undefined
+  d3.selectAll('#crtrees > svg').classed('highlight', false).classed('nonhighlight', false)
+  d3.selectAll('circle.graphNode').classed('highlight', false).classed('nonhighlight', false)
+  d3.selectAll('line.graphEdge').classed('highlight', false).classed('nonhighlight', false)
 }
 
 /** Pulse all nodes of a given color (e.g., when a tree has been clicked)
@@ -41,11 +35,11 @@ function resetHighlightColor () {
   */
 function pulser (i, round) {
   return function () {
-    svgnodes.transition()
+    d3.selectAll('circle.graphNode')
+      .transition()
       .duration(100)
       .attr('r', v => radius(v) + (v.crtree[round].rank === i ? 8 : 0))
-    svgnodes.transition()
-      .delay(100)
+      .transition()
       .duration(200)
       .attr('r', radius)
   }
@@ -64,7 +58,7 @@ function radialPoint (x, y) {
   * @param {Dictionary} state the current program state
   * @param {TreeList} trees a list of tree objects
   */
-function drawTrees (state, trees) {
+async function drawTrees (state, trees) {
   if (!state.crtrees) return
 
   const d3treeMaker = d3.tree().size([2 * Math.PI, 30])
@@ -72,6 +66,7 @@ function drawTrees (state, trees) {
 
   const crtrees = d3.select('#crtrees')
   crtrees.selectAll('svg').remove()
+  crtrees.classed('loading', true)
   for (let i = 0; i < trees.length; i++) {
     const root = d3.hierarchy(trees[i])
     root.sort()
@@ -102,11 +97,12 @@ function drawTrees (state, trees) {
       .attr('cx', v => v.x)
       .attr('cy', v => v.y)
 
-    svg.on('mouseover', () => highlightColor(i, state.round))
-    svg.on('mouseout', resetHighlightColor)
+    svg.on('mouseover', () => { hoveringTreeRound = state.round; highlightColor(i, state.round) })
+    svg.on('mouseout', () => { hoveringTreeRound = undefined; resetHighlightColor() })
     svg.on('click', pulser(i, state.round))
-    crtrees.append(() => svg.node())
+    crtrees.insert(() => svg.node(), 'div.loading-animation')
   }
+  crtrees.classed('loading', false)
 }
 
 /** Compute radius of a node.
@@ -115,29 +111,6 @@ function drawTrees (state, trees) {
   */
 function radius (v) {
   return 5 * Math.sqrt(v.neighbors.length) + 4
-}
-
-/** Draw a given round.
- *  @param {Dictionary} state the current program state
-  * @param {Number} round
-  */
-function drawRound (state) {
-  document.getElementById('displayRound').innerText = state.round
-  svgnodes.style('fill', v => color(v.crtree[state.round].rank,
-    treesPerRound[state.round].length, state.round, treesPerRound.length))
-
-  drawTrees(state, treesPerRound[state.round])
-
-  if (hoveringNode) {
-    highlightColor(hoveringNode.crtree[state.round].rank, state.round)
-  }
-
-  /* Pulse effect */
-  simulation.alpha(1).restart()
-  svgnodes.transition().duration(200)
-    .attr('r', v => radius(v) + 2)
-  svgnodes.transition().delay(200).duration(200)
-    .attr('r', radius)
 }
 
 /** Recenter the simulation (e.g. after window resize event) */
@@ -154,15 +127,16 @@ function recenter () {
 /** Sample and draw new graph
   * Also draws CR trees, sets up mouseover events, and starts the simulation
   */
-function reload (forceResample = false) {
+async function reload (forceResample = false) {
+  const svg = d3.select('main > svg')
   const state = getState()
   const changedFields = getStateChanges(state)
   if (forceResample || changedFields === undefined || changedFields.has('n') || changedFields.has('m') || changedFields.has('seed')) {
-    if (svgnodes) {
-      resetHighlightColor()
-      svglinks.remove()
-      svgnodes.remove()
-    }
+    hoveringNode = undefined
+    draggingNode = undefined
+    resetHighlightColor()
+    svg.selectAll('*').remove()
+    d3.select('main').classed('loading', true)
     const w = document.getElementById('main').offsetWidth
     const h = document.getElementById('main').offsetHeight
 
@@ -178,16 +152,17 @@ function reload (forceResample = false) {
       .force('charge', d3.forceManyBody().strength(state.charge))
       .force('link', d3.forceLink(graph.edges).distance(50).strength(0.9))
 
-    const svg = d3.select('main > svg')
-    svglinks = svg.selectAll('line.graphEdge')
+    svg.selectAll('line.graphEdge')
       .data(graph.edges).enter().append('line')
       .attr('class', 'graphEdge')
-    svgnodes = svg.selectAll('circle.graphNode')
+
+    svg.selectAll('circle.graphNode')
       .data(graph.vertices).enter().append('circle')
       .attr('class', 'graphNode')
       .attr('r', 10).attr('cx', w / 2).attr('cy', h / 2)
       .call(d3.drag()
         .on('start', (v) => {
+          draggingNode = v
           if (!d3.event.active) simulation.alphaTarget(0.3).restart();
           [v.fx, v.fy] = [v.x, v.y]
         })
@@ -195,32 +170,54 @@ function reload (forceResample = false) {
           [v.fx, v.fy] = [d3.event.x, d3.event.y]
         })
         .on('end', (v) => {
+          draggingNode = undefined
           if (!d3.event.active) simulation.alphaTarget(0);
           [v.fx, v.fy] = [null, null]
         }))
       .on('mouseover', (v) => {
         hoveringNode = v
         const round = getState().round
-        highlightColor(v.crtree[round].rank, round)
+        if (draggingNode === undefined) highlightColor(v.crtree[round].rank, round)
       })
-      .on('mouseout', resetHighlightColor)
+      .on('mouseout', () => {
+        hoveringNode = undefined
+        if (draggingNode === undefined) resetHighlightColor()
+      })
 
     recenter()
+    d3.select('main').classed('loading', false)
     state.round = Math.min(state.round, treesPerRound.length - 1)
-    drawTrees(state, treesPerRound[state.round])
-    updateState(state)
-    drawRound(state)
+    updateState(state, true)
+    changedFields.add('round')
   } else {
     if (changedFields.has('charge')) {
       simulation.force('charge', d3.forceManyBody().strength(state.charge))
         .alpha(0.5).restart()
     }
-    if (changedFields.has('round')) {
-      drawRound(state)
-    }
   }
   if (changedFields !== undefined && changedFields.size !== 0) {
     drawNavElements(state)
+  }
+  if (changedFields.has('round')) {
+    if (hoveringTreeRound) {
+      hoveringTreeRound = undefined
+      resetHighlightColor()
+    }
+
+    drawTrees(state, treesPerRound[state.round])
+
+    if (draggingNode || hoveringNode) {
+      const activeNode = draggingNode || hoveringNode
+      highlightColor(activeNode.crtree[state.round].rank, state.round)
+    }
+
+    changedFields.add('count')
+
+    /* Pulse effect */
+    simulation.alpha(1).restart()
+    svg.selectAll('circle.graphNode')
+      .transition().duration(200).attr('r', v => radius(v) + 2)
+      .transition().duration(200).attr('r', radius)
   }
 }
 
@@ -267,19 +264,24 @@ function drawNavElements (state) {
   document.getElementById('n').innerText = state.n
   document.getElementById('m').innerText = state.m
   document.getElementById('charge').innerText = state.charge
+  document.getElementById('displayRound').innerText = state.round
 }
 
 /** The main function is called when the page has loaded */
 function main () {
   simulation = d3.forceSimulation().on('tick', () => {
-    svglinks
+    d3.selectAll('line.graphEdge')
       .attr('x1', e => e.source.x)
       .attr('y1', e => e.source.y)
       .attr('x2', e => e.target.x)
       .attr('y2', e => e.target.y)
-    svgnodes
+    d3.selectAll('circle.graphNode')
       .attr('cx', v => v.x)
       .attr('cy', v => v.y)
+      .attr('fill', v => {
+        const round = getState().round
+        return color(v.crtree[round].rank, treesPerRound[round].length, round, treesPerRound.length)
+      })
   })
 
   document.getElementById('up').addEventListener('click', () => increase('charge'))
@@ -288,6 +290,7 @@ function main () {
   document.getElementById('left').addEventListener('click', () => decrease('round'))
   document.getElementById('reload').addEventListener('click', () => reload(true))
   document.addEventListener('keydown', shortcuts)
+  window.addEventListener('wheel', event => (event.deltaY < 0) ? increase('charge') : decrease('charge'))
   window.addEventListener('hashchange', () => reload())
   window.onresize = recenter
   reload()

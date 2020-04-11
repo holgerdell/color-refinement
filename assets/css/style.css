@@ -37,12 +37,7 @@ body {
 
 @media only screen and (min-width: 500px) {
   body {
-    grid-template-areas:
-      "header crtrees"
-      "main   crtrees"
-      "nav    nav";
     grid-template-columns: 1fr auto;
-    grid-template-rows: 0 auto max-content;
   }
 }
 
@@ -221,6 +216,22 @@ div.button:hover > div {
   height: 99%;
   overflow: hidden;
   width: 100%;
+}
+
+.loading-animation {
+  display: none;
+}
+
+main .loading-animation {
+  left: 45%;
+  margin-left: -56px;
+  margin-top: -56px;
+  position: absolute;
+  top: 50%;
+}
+
+.loading .loading-animation {
+  display: block;
 }
 
 circle {

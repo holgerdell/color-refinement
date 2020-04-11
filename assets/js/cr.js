@@ -146,8 +146,10 @@ export function colorRefinement (graph) {
     }
 
     const numColors = trees[round].length
-    if (prevNumColors === numColors) return trees
-    else prevNumColors = numColors
+    if (prevNumColors === numColors) {
+      trees.pop() // remove last round (since no further refinement occurred)
+      return trees
+    } else { prevNumColors = numColors }
   }
   return trees
 }

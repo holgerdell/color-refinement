@@ -52,10 +52,11 @@ const stringify = (x) => {
   }
 }
 
-export const updateState = (state) => {
+export const updateState = (state, useAsOld = false) => {
   let hash = '#'
   for (const k of defaults.keys()) {
     if (state[k] !== defaults.get(k)) hash += `${k}=${stringify(state[k])}&`
+    if (useAsOld) oldState[k] = state[k]
   }
   hash = hash.substring(0, hash.length - 1)
   window.location.hash = hash
