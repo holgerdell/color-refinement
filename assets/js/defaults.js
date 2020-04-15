@@ -6,7 +6,8 @@ const state = {
   navbar: true,
   crtrees: true,
   round: 0,
-  seed: () => (Math.seedrandom) ? '' : undefined
+  seed: () => (Math.seedrandom) ? '' : undefined,
+  count: false
 }
 
 export const get = (k) => (typeof state[k] === 'function') ? state[k]() : state[k]

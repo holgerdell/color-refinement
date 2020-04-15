@@ -17,13 +17,13 @@ function highlightColor (i, round) {
   d3.selectAll('circle.graphNode').attr('class', o => o.crtree[round].rank === i ? 'graphNode highlight' : 'graphNode nonhighlight')
   d3.selectAll('line.graphEdge').attr('class', o => (o.source.crtree[round].rank === i &&
      o.target.crtree[round].rank === i) ? 'graphEdge highlight' : 'graphEdge nonhighlight')
-  d3.selectAll('#crtrees > svg').classed('nonhighlight', true)
+  d3.selectAll('#crtrees svg').classed('nonhighlight', true)
   d3.select('#crtree' + i).classed('nonhighlight', false).classed('highlight', true)
 }
 
 /** Reset all highlights (e.g. when the mouseover event is over) */
 function resetHighlightColor () {
-  d3.selectAll('#crtrees > svg').classed('highlight', false).classed('nonhighlight', false)
+  d3.selectAll('#crtrees svg').classed('highlight', false).classed('nonhighlight', false)
   d3.selectAll('circle.graphNode').classed('highlight', false).classed('nonhighlight', false)
   d3.selectAll('line.graphEdge').classed('highlight', false).classed('nonhighlight', false)
 }
@@ -65,7 +65,7 @@ async function drawTrees (state, trees) {
     .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth)
 
   const crtrees = d3.select('#crtrees')
-  crtrees.selectAll('svg').remove()
+  crtrees.selectAll('div').remove()
   crtrees.classed('loading', true)
   for (let i = 0; i < trees.length; i++) {
     const root = d3.hierarchy(trees[i])
@@ -77,9 +77,12 @@ async function drawTrees (state, trees) {
       [v.x, v.y] = [v.x + 46, v.y + 46]
     })
 
-    const svg = d3.create('svg').attr('id', 'crtree' + i)
+    const div = d3.create('div')
+    const svg = div.append('svg').attr('id', 'crtree' + i)
       .style('background-color',
         color(i, trees.length, state.round, treesPerRound.length))
+
+    div.append('div').classed('count', true).text(trees[i].class.length)
 
     svg.selectAll('line.treeEdge')
       .data(d3tree.links())
@@ -97,10 +100,10 @@ async function drawTrees (state, trees) {
       .attr('cx', v => v.x)
       .attr('cy', v => v.y)
 
-    svg.on('mouseover', () => { hoveringTreeRound = state.round; highlightColor(i, state.round) })
-    svg.on('mouseout', () => { hoveringTreeRound = undefined; resetHighlightColor() })
-    svg.on('click', pulser(i, state.round))
-    crtrees.insert(() => svg.node(), 'div.loading-animation')
+    div.on('mouseover', () => { hoveringTreeRound = state.round; highlightColor(i, state.round) })
+    div.on('mouseout', () => { hoveringTreeRound = undefined; resetHighlightColor() })
+    div.on('click', pulser(i, state.round))
+    crtrees.insert(() => div.node(), 'div.loading-animation')
   }
   crtrees.classed('loading', false)
 }
@@ -205,6 +208,7 @@ async function reload (forceResample = false) {
     }
 
     drawTrees(state, treesPerRound[state.round])
+    changedFields.add('count')
 
     if (draggingNode || hoveringNode) {
       const activeNode = draggingNode || hoveringNode
@@ -218,6 +222,13 @@ async function reload (forceResample = false) {
     svg.selectAll('circle.graphNode')
       .transition().duration(200).attr('r', v => radius(v) + 2)
       .transition().duration(200).attr('r', radius)
+  }
+  if (changedFields.has('count')) {
+    if (state.count) {
+      d3.selectAll('div.count').style('display', 'block')
+    } else {
+      d3.selectAll('div.count').style('display', 'none')
+    }
   }
 }
 
@@ -242,6 +253,7 @@ const getMax = field => (field === 'round') ? treesPerRound.length - 1
   : (field === 'charge') ? 0 : Infinity
 const increase = field => addto(field, STEPSIZE[field], getMin(field), getMax(field))
 const decrease = field => addto(field, -STEPSIZE[field], getMin(field), getMax(field))
+const toggle = field => { const state = getState(); state[field] = !state[field]; updateState(state) }
 
 function shortcuts (event) {
   if (!event.ctrlKey && !event.altKey) {
@@ -254,6 +266,7 @@ function shortcuts (event) {
     else if (['-', 'm'].includes(event.key)) decrease('m')
     else if (['N'].includes(event.key)) increase('n')
     else if (['n'].includes(event.key)) decrease('n')
+    else if (['c'].includes(event.key)) toggle('count')
   }
 }
 
@@ -289,6 +302,7 @@ function main () {
   document.getElementById('right').addEventListener('click', () => increase('round'))
   document.getElementById('left').addEventListener('click', () => decrease('round'))
   document.getElementById('reload').addEventListener('click', () => reload(true))
+  document.getElementById('count').addEventListener('click', () => toggle('count'))
   document.addEventListener('keydown', shortcuts)
   window.addEventListener('wheel', event => (event.deltaY < 0) ? increase('charge') : decrease('charge'))
   window.addEventListener('hashchange', () => reload())

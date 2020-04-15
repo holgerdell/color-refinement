@@ -117,11 +117,13 @@ function refineAtNode (v, depth, treelist) {
     T = {
       rank: undefined,
       size: 1,
-      children: neighbors
+      children: neighbors,
+      class: [] // list of vertices with this color
     }
     for (let i = 0; i < neighbors.length; i++) T.size += neighbors[i].size
     treelist.push(T)
   }
+  T.class.push(v)
   v.crtree.push(T)
 }
 
