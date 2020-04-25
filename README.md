@@ -16,10 +16,10 @@ It is also known as the 1-dimensional Weisfeiler-Leman algorithm.
 
 Install the development tools:
 ```bash
-yarn install
+yarn
 ```
 
-Start a http server for local development:
+Start an http server for local development:
 ```bash
 yarn run http-server
 ```

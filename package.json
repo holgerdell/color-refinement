@@ -6,7 +6,6 @@
   "repository": "git@github.com:holgerdell/color-refinement.git",
   "author": "Holger Dell <holgerdell@users.noreply.github.com>",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "http-server": "^0.12.1",
     "standard": "^14.3.3",
