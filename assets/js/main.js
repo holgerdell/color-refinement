@@ -304,7 +304,7 @@ function main () {
   document.getElementById('reload').addEventListener('click', () => reload(true))
   document.getElementById('count').addEventListener('click', () => toggle('count'))
   document.addEventListener('keydown', shortcuts)
-  window.addEventListener('wheel', event => (event.deltaY < 0) ? increase('charge') : decrease('charge'))
+  document.getElementById('main').addEventListener('wheel', event => (event.deltaY < 0) ? increase('charge') : decrease('charge'))
   window.addEventListener('hashchange', () => reload())
   window.onresize = recenter
   reload()
