@@ -67,7 +67,7 @@ function compareTrees (T1, T2) {
       const res = compareTrees(T1.children[i], T2.children[i])
       if (res !== 0) return res
     }
-    // (this line should never be reached)
+    console.error('several refs to same tree were found, this is not intended.')
   }
 }
 
@@ -136,7 +136,7 @@ function refineAtNode (v, depth, treelist) {
 export function colorRefinement (graph) {
   const trees = []
   let prevNumColors = 0
-  for (let round = 0; round < 99; round++) {
+  for (let round = 0; true; round++) {
     trees[round] = []
     for (let i = 0; i < graph.vertices.length; i++) {
       refineAtNode(graph.vertices[i], round, trees[round])
@@ -153,5 +153,4 @@ export function colorRefinement (graph) {
       return trees
     } else { prevNumColors = numColors }
   }
-  return trees
 }
