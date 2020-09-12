@@ -218,8 +218,12 @@ async function reload (forceResample = false) {
 
     changedFields.add('count')
 
-    /* Pulse effect */
-    simulation.alpha(1).restart()
+    /* Change node colors based on current round */
+    d3.selectAll('circle.graphNode').attr('fill', v => {
+      return color(v.crtree[state.round].rank, treesPerRound[state.round].length, state.round, treesPerRound.length)
+    })
+
+    /* Pulse all nodes */
     svg.selectAll('circle.graphNode')
       .transition().duration(200).attr('r', v => radius(v) + 2)
       .transition().duration(200).attr('r', radius)
@@ -292,10 +296,6 @@ function main () {
     d3.selectAll('circle.graphNode')
       .attr('cx', v => v.x)
       .attr('cy', v => v.y)
-      .attr('fill', v => {
-        const round = getState().round
-        return color(v.crtree[round].rank, treesPerRound[round].length, round, treesPerRound.length)
-      })
   })
 
   document.getElementById('up').addEventListener('click', () => increase('charge'))
