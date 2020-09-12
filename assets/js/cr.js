@@ -1,3 +1,4 @@
+/* cr.js | MIT License | https://github.com/holgerdell/color-refinement */
 
 /** Sample a random graph G(n,m)
   * @param {Number} n vertices

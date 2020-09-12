@@ -1,3 +1,5 @@
+/* cr.js | MIT License | https://github.com/holgerdell/color-refinement */
+
 /* default URL parameters */
 const state = {
   n: 50,

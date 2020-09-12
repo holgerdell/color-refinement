@@ -1,4 +1,5 @@
-/* cr.js | MIT License | github.com/holgerdell/color-refinement */
+/* cr.js | MIT License | https://github.com/holgerdell/color-refinement */
+
 import { getState, updateState, getStateChanges } from './state.js'
 import color from './color.js'
 import * as cr from './cr.js'

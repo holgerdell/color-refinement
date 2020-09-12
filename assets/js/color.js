@@ -1,3 +1,5 @@
+/* cr.js | MIT License | https://github.com/holgerdell/color-refinement */
+
 /** Given an object and the total number of objects, returns a color
   * @param {Number} obj is the current object (between 0 and numObjects-1)
   * @param {Number} numObjects is the total number of colors needed

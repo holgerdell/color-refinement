@@ -1,3 +1,5 @@
+/* cr.js | MIT License | https://github.com/holgerdell/color-refinement */
+
 import * as defaults from './defaults.js'
 
 const parse = (x, t) => {
