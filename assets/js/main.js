@@ -165,20 +165,20 @@ async function reload (forceResample = false) {
       .attr('class', 'graphNode')
       .attr('r', 10).attr('cx', w / 2).attr('cy', h / 2)
       .call(d3.drag()
-        .on('start', (v) => {
+        .on('start', (event, v) => {
           draggingNode = v
-          if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+          if (!event.active) simulation.alphaTarget(0.3).restart();
           [v.fx, v.fy] = [v.x, v.y]
         })
-        .on('drag', (v) => {
-          [v.fx, v.fy] = [d3.event.x, d3.event.y]
+        .on('drag', (event, v) => {
+          [v.fx, v.fy] = [event.x, event.y]
         })
-        .on('end', (v) => {
+        .on('end', (event, v) => {
           draggingNode = undefined
-          if (!d3.event.active) simulation.alphaTarget(0);
+          if (!event.active) simulation.alphaTarget(0);
           [v.fx, v.fy] = [null, null]
         }))
-      .on('mouseover', (v) => {
+      .on('mouseover', (_, v) => {
         hoveringNode = v
         const round = getState().round
         if (draggingNode === undefined) highlightColor(v.crtree[round].rank, round)
