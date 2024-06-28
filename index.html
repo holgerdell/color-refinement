@@ -1,47 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title>Color Refinement</title>
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
-    <link rel="stylesheet" href="https://cdn.rawgit.com/tobiasahlin/SpinKit/master/spinkit.min.css"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="./assets/css/style.css"/>
-    <script src="https://d3js.org/d3.v7.min.js" async></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js" async></script>
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.rawgit.com/tobiasahlin/SpinKit/master/spinkit.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"
+      async
+    ></script>
     <script type="module" src="./assets/js/main.js" async></script>
   </head>
   <body>
     <header>
-      <h1>
-        Color Refinement
-      </h1>
-        Round
-        <div class="button" id="left">
+      <h1>Color Refinement</h1>
+      Round
+      <div class="button" id="left">
         <i class="material-icons">keyboard_arrow_left</i>
         <div>Previous round of color refinement [left, backspace, h]</div>
-      </div><span id="displayRound">0</span><div class="button" id="right">
+      </div>
+      <span id="displayRound">0</span>
+      <div class="button" id="right">
         <i class="material-icons">keyboard_arrow_right</i>
         <div>Next round of color refinement [right, space, l]</div>
-      </div> of <span id="numRounds"></span>
+      </div>
+      of <span id="numRounds"></span>
     </header>
     <nav id="nav">
       <div class="button" id="help">
-        <i class="material-icons">help</i> 
-        <div>URL parameters:<br/>
-          #n=<span id="n"></span>&amp;m=<span id="m"></span>&amp;charge=<span id="charge"></span>
+        <i class="material-icons">help</i>
+        <div>
+          URL parameters:<br />
+          #n=<span id="n"></span>&amp;m=<span id="m"></span>&amp;charge=<span
+            id="charge"
+          ></span>
           <br />
           Also try:
-          <ul style="padding-left: 2em;">
-            <li>&amp;seed=hello  (to set the random seed)</li>
-            <li>&amp;navbar=false  (hide navbar)</li>
-            <li>&amp;crtrees=false  (hide trees and improve performance)</li>
+          <ul style="padding-left: 2em">
+            <li>&amp;seed=hello (to set the random seed)</li>
+            <li>&amp;navbar=false (hide navbar)</li>
+            <li>&amp;crtrees=false (hide trees and improve performance)</li>
           </ul>
         </div>
       </div>
       <div class="button" id="reload">
-        <i class="material-icons">replay</i> 
+        <i class="material-icons">replay</i>
         <div>Resample random graph from a new seed [r]</div>
       </div>
       <div class="button" id="up">
@@ -65,7 +80,10 @@
         <div class="sk-fold-cube"></div>
       </div>
       <svg class="center-screen"></svg>
-      <div id="creator">by <a href="https://holgerdell.com">Holger Dell</a> (2020). Source code on <a href="https://github.com/holgerdell/color-refinement">github</a>.</div>
+      <div id="creator">
+        by <a href="https://holgerdell.com">Holger Dell</a> (2020). Source code
+        on <a href="https://github.com/holgerdell/color-refinement">github</a>.
+      </div>
     </main>
     <aside id="crtrees" class="loading">
       <div class="loading-animation sk-fold sk-center">

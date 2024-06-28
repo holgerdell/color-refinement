@@ -1,23 +1,24 @@
 {
   "name": "color-refinement",
-  "version": "1.0.0",
-  "description": "A visual demo of the color refinement algorithm",
-  "main": "assets/js/main.js",
-  "repository": "git@github.com:holgerdell/color-refinement.git",
+  "version": "1.0.1",
   "author": "Holger Dell <holgerdell@users.noreply.github.com>",
-  "license": "MIT",
+  "repository": "git@github.com:holgerdell/color-refinement.git",
+  "main": "assets/js/main.js",
   "devDependencies": {
-    "http-server": "^0.12.1",
-    "standard": "^14.3.3",
-    "stylelint": "^13.2.1",
-    "stylelint-config-standard": "^20.0.0"
+    "@eslint/js": "^9.5.0",
+    "eslint": "^9.5.0",
+    "globals": "^15.6.0",
+    "http-server": "^14.1.1",
+    "prettier": "^3.3.2"
   },
-  "standard": {
-    "globals": [
-      "d3"
-    ]
+  "description": "A visual demo of the color refinement algorithm",
+  "license": "MIT",
+  "scripts": {
+    "dev": "http-server -a localhost -c-1",
+    "format": "prettier --write .",
+    "lint": "eslint ."
   },
-  "stylelint": {
-    "extends": "stylelint-config-standard"
+  "prettier": {
+    "semi": false
   }
 }

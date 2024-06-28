@@ -72,8 +72,12 @@ header {
 }
 
 @media only screen and (min-width: 700px) {
-  header { font-size: 3vw; }
-  h1 { font-size: 1.5em; }
+  header {
+    font-size: 3vw;
+  }
+  h1 {
+    font-size: 1.5em;
+  }
 }
 
 header > div {
@@ -143,7 +147,7 @@ div.button > div {
   padding-top: 1rem;
   padding-bottom: 1rem;
   font-size: 1.5rem;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 div.button:hover i.material-icons,

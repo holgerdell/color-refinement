@@ -1,14 +1,17 @@
 /* cr.js | MIT License | https://github.com/holgerdell/color-refinement */
 
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm"
+
 /** Given an object and the total number of objects, returns a color
-  * @param {Number} obj is the current object (between 0 and numObjects-1)
-  * @param {Number} numObjects is the total number of colors needed
-  * @param {Number} round is the current round (between 0 and numRounds-1)
-  * @param {Number} numRounds is the total number of color refinement rounds
-  *
-  * @return {String} an RGB string, such as #ef1d99
-  */
-export default function color (obj, numObjects, round, numRounds) {
+ * @param {Number} obj is the current object (between 0 and numObjects-1)
+ * @param {Number} numObjects is the total number of colors needed
+ * @param {Number} round is the current round (between 0 and numRounds-1)
+ * @param {Number} numRounds is the total number of color refinement rounds
+ *
+ * @return {String} an RGB string, such as #ef1d99
+ */
+// eslint-disable-next-line no-unused-vars
+export default function color(obj, numObjects, round, numRounds) {
   let fraction = 0
   if (obj < 0 || obj > numObjects - 1) return undefined
   if (numObjects > 1) fraction = obj / (numObjects - 1)

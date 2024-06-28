@@ -6,39 +6,38 @@ A visual demo of the color refinement algorithm.
 - For offline use, you will need to download the external resources loaded at the top of index.html, and change the paths correspondingly.
 
 ## Screenshot
+
 ![screenshot](screenshot.png)
 
 ## Description
+
 The color refinement algorithm is a heuristic method to detect whether two graphs are isomorphic (see, e.g., [GKMS17+]).
 It is also known as the 1-dimensional Weisfeiler-Leman algorithm.
 
 ## Development
 
-Install the development tools:
+For local development, install your favorite JavaScript toolkit, such as [bun](https://bun.sh/).
+Then install the dependencies and start the development server:
+
 ```bash
-yarn
+bun install --frozen-lockfile
+bun dev
 ```
 
-Start an http server for local development:
+Run [prettier](https://prettier.io/) to format the code:
+
 ```bash
-yarn run http-server
+bun format
 ```
 
-Manually run the JavaScript linter [standard](https://standardjs.com/):
+Run [eslint](https://eslint.org/) to check the code for errors:
+
 ```bash
-yarn run standard
+bun lint
 ```
-
-Manually run the CSS linter [stylelint](https://stylelint.io/):
-```bash
-yarn run stylelint "**/*.css"
-```
-
-Both linters support `--fix` for automatic fixing.
-
-Visual Studio Code provides the extensions [chenxsan.vscode-standardjs](https://marketplace.visualstudio.com/items?itemName=chenxsan.vscode-standardjs) and [stylelint.vscode-stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) for automatic linting.
 
 ## Built with
+
 - [D3.js](https://d3js.org/)
 - [CSS grid](https://developer.mozilla.org/en-US/docs/Web/CSS/grid)
 - [normalize.css](https://necolas.github.io/normalize.css/)
