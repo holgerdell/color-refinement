@@ -5,11 +5,11 @@
   "repository": "git@github.com:holgerdell/color-refinement.git",
   "main": "assets/js/main.js",
   "devDependencies": {
-    "@eslint/js": "^9.5.0",
-    "eslint": "^9.5.0",
-    "globals": "^15.6.0",
+    "@eslint/js": "^9.25.0",
+    "eslint": "^9.25.0",
+    "globals": "^16.0.0",
     "http-server": "^14.1.1",
-    "prettier": "^3.3.2"
+    "prettier": "^3.5.3"
   },
   "description": "A visual demo of the color refinement algorithm",
   "license": "MIT",
